@@ -5,7 +5,7 @@
     "picture": "https://avatars.githubusercontent.com/u/16393929?v=4",
     "email": "gavinng@hawaii.edu",
     "phone": "808-351-6447",
-    "website": "https://mmaluhia.github.io",
+    "website": "http://github.com/Ng-Gavin",
     "summary": "I am studying for a B.S. in Computer Engineering in the College of Engineering: Electrical and Computer Engineering at the University of Hawaii. I expect to graduate in Spring, 2024.",
     "location": { "address": "", "postalCode": "96817", "city": "Honolulu", "countryCode": "USA", "region": "Hawaii" },
     "profiles": [
@@ -22,19 +22,19 @@
   "skills": [
     {
       "name": "Languages and Frameworks",
-      "keywords": [ "C", "C++", "Java", "Javascript", "Assembly", "Common Lisp" ]
+      "keywords": [ "C", "C++", "Java", "Javascript", "Python", "Assembly" ]
     },
     {
       "name": "Toolsets/OS",
-      "keywords": [ "MacOS", "Ubuntu", "Git/GitHub", "g++", "TI LaunchPad" ]
+      "keywords": [ "Windows", "Ubuntu", "Git/GitHub" ]
     }
   ],
   "education": [
     {
       "institution": "University of Hawaii, Honolulu, HI",
-      "area": "Computer Science (expected Spring, 2018)",
+      "area": "Computer Engineering (expected Spring, 2024)",
       "studyType": "B.S.",
-      "startDate": "2013-09-01",
+      "startDate": "2020-09-01",
       "endDate": "Present",
       "courses": [
       ]
