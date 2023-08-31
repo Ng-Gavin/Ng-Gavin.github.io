@@ -6,7 +6,7 @@ title: "Javascript, WODs the deal?"
 date: 2023-08-31
 published: true
 labels:
-  - SoftwareEngineering
+  - Software Engineering
   - Reflection
   - Javascript
 ---
