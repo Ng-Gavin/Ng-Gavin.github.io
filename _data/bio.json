@@ -22,11 +22,15 @@
   "skills": [
     {
       "name": "Languages and Frameworks",
-      "keywords": [ "C", "C++", "Java", "Javascript", "Python", "Assembly" ]
+      "keywords": [ "C", "C++", "Java", "Javascript", "Python", "Assembly", "Verilog", "MATLAB" ]
     },
     {
       "name": "Toolsets/OS",
-      "keywords": [ "Windows", "Ubuntu", "Git/GitHub" ]
+      "keywords": [ "Windows", "Ubuntu", "Git/GitHub", "Eclipse", "Visual Studio Code", "VirtualBox", "Onshape", " Autodesk Inventor", "Ultimaker Cura" ]
+    },
+    {
+      "name": "Tools",
+      "keywords": [ "MIG Welding", "Soldering", "Power Tools", "Hand Tools" ]
     }
   ],
   "education": [
@@ -42,69 +46,50 @@
   ],
   "work": [
     {
-      "company": "UH Manoa Board of Publications",
-      "position": "Web Developer",
+      "company": "Maryknoll Highschool",
+      "position": "Robotics Mentor",
       "website": "",
-      "startDate": "2015-08-01",
+      "startDate": "2022-01-01",
       "endDate": "Present",
-      "summary": "Head of online presence for Ka Leo",
+      "summary": "Mentor for the Maryknoll Highschool Robotics Team",
       "highlights": [
-        "Maintain, update, and oversee official college newspaper website",
-        "Drive, design and build student-community projects for UH Manoa"
+        "Teaching key technical skills like programming, wiring, and using tools.",
+        "Teaching soft skills like teamwork, communication, and problem solving."
       ]
     },
     {
-      "company": "UH Information Technology Services",
-      "position": "Help Desk Consultant",
-      "website": "http://www.hawaii.edu/its/",
-      "startDate": "2015-01-01",
-      "endDate": "2016-03-15",
-      "summary": "",
+      "company": "Native Hawaiian Science & Engineering Mentorship Program (NHSEMP)",
+      "position": "Mentor",
+      "website": "http://nhsemp.eng.hawaii.edu",
+      "startDate": "2022-06-06",
+      "endDate": "2022-8-22",
+      "summary": "Summer mentor at the University of Hawaii on behalf of the University of Hawaii Drone Technologies Lab. ",
       "highlights": [
-        "Troubleshoot software, hardware and networking issues over the phone",
-        "Answer phone and email responses to the ITS Help Desk"
+        "Assigned lab relevant projects and teaching skills to accomplish them.",
+        "List of skills that needed to be taught: 3D modelling and printing, programming, and soldering."
       ]
     }
   ],
   "volunteer": [
     {
-      "organization": "Center for Renewable Energy and Island Sustainability",
-      "website": "http://manoa.hawaii.edu/reis",
-      "position": "Software Developer",
-      "startDate": "2016-01-01",
+      "organization": "University of Hawaii Drone Technologies",
+      "website": "https://me.hawaii.edu/design/uhdt/",
+      "position": "Image Processing Lead",
+      "startDate": "2022-01-10",
       "endDate": "Present",
-      "summary": "Lead developer for weather sensing project",
+      "summary": "Lead for the image processing subsystem",
       "highlights": [
-        "Design firmware for distributed weather sensor network",
-        "Maintain custom data collection and storage infrastructure"
-      ]
-    },
-    {
-      "organization": "",
-      "website": "",
-      "position": "Professional organization involvement",
-      "startDate": "",
-      "endDate": "",
-      "summary": "",
-      "highlights": [
-        "Chair, ACM Manoa, 2016-Present",
-        "Member, IEEE Student Branch, 2014-Present",
-        "Webmaster/IT Officer, IEEE Student Branch, UH Manoa, 2012-2013"
+        "Making algorithms to process images from the drone's camera to detect and classify objects of interest.",
+        "Organize team to accomplish tasks and meet deadlines."
       ]
     }
   ],
   "awards": [
     {
-      "title": "B+ Scholarship",
-      "date": "2013-Present",
-      "awarder": "State of Hawaii",
-      "summary": "Scholarships awarded to incoming freshmen and continuing students who complete a rigorous high school curriculum with a minimum overall GPA of 3.0 at a Hawai'i public school."
-    },
-    {
-      "title": "First place",
-      "date": "2015",
-      "awarder": "University of Hawaii Micromouse Competition",
-      "summary": "My team won first place in 2015.  See my portfolio site for more details."
+      "title": "Hawaii Regional Finalists",
+      "date": "2019",
+      "awarder": "FIRST Robotics Competition",
+      "summary": "My team got 2nd place at the Hawaii Regional."
     }
   ],
   "references": [
