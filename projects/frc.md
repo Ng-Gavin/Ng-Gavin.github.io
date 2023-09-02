@@ -25,13 +25,13 @@ I currently do not have a picture of the robot from 2018. This robot was designe
 
 
 <p align="center">
-  <img class="img-fluid" src="../img/interop/frcbot2019.png">
+  <img class="img-fluid" src="../img/frc/frcbot2019.png">
 </p>
 This my teams 2019 robot. This robot was designed to pick up and deposit velcro-lined polycarbonate disks, and to launch balls. This robot was programmed in Java. The robot code can be found here: <a href="https://github.com/Ng-Gavin/2019-FRC-Robot">Team2441_2019_FRC</a>
 
 
 <p align="center">
-  <img class="img-fluid" src="../img/interop/frcbot2020.png">
+  <img class="img-fluid" src="../img/frc/frcbot2020.png">
 </p>
 This my teams 2020 robot. This robot was designed to pick up and launch balls, and climb an elevated bar. This robot was programmed in Java. The robot code can be found here: <a href="https://github.com/Ng-Gavin/2020-FRC-Robot">Team2441_2020_FRC</a>
 
