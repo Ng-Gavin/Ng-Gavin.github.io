@@ -19,14 +19,14 @@ summary: "University of Hawaii Drone Technologies develops an autonomous drone f
 
 The University of Hawaii Drone Technologies(UHDT) is a Vertically Integrated Project(VIP) which is a multidisciplinary team consisting of mechanical, electrical, and computer engineers. The Student Unmanned Aerial Systems Competition(SUAS) is an annual competition hosted by the Association for Unmanned Vehicle Systems International(AUVSI). In this competition, drones are tasked with autonomously navigating a course and completing a series of tasks. The tasks include autonomously traversing a series of waypoints, identifying and locating targets, and dropping payloads cooresponding to each target. This is done as a simulated mission of package delivery to a remote location.
 
-<p align="center"
+<p align="center">
   <img class="img-fluid" src="../img/suas/drone.png">
 </p>
 
 For this project, our team was split up into several subsystems each assigned to different ascpects of the drone system. I was the lead of the Image Proccesing subsystem. My subsystem was tasked with creating an autonomous system to identify and locate targets on the ground using the drone's camera. This was done using a combination of computer vision and machine learning.
 
 <p align="center">
-  <img class="img-fluid" src="../img/suas/waypoints.png">
+  <img class="img-fluid" src="../img/suas/target.png">
 </p>
 
 The payload is a water bottle with a description of the target on it's label. These bottles must be dropped on the coorsponding target within a 15 feet radius. Targets are characterized by their shape, color of the shape, alphanumeric, and color of the alphanumeric. This is accomplished with a combination of object detection, shape recognition, color recognition, and alphanumeric recognition algorithms. The object detection and shape recognition algorithms are made using YOLOv5, a common machine vision library. Color recognition was made using the K-means clustering, a data analyzation technique. Alphanumeric recognition was made using the Tesseract OCR library. These algorithms were trained on a custom artificial dataset we made using a Python script, the script was also made to generate a label file for each image. A script then is used to take the results of the algorithms combined with drone sensor data embedded into the image to determine the location of the target as GPS coordinates. A final script uses the results of the previous script to create a waypoint file for the drone to follow to drop the payloads.
