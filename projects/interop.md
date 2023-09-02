@@ -8,7 +8,6 @@ published: true
 labels:
   - Drones
   - Ubuntu
-  - Machine Learning
   - Virtual Machines
 summary: "Interoptibility server for the University of Hawaii Drone Technologies."
 ---
