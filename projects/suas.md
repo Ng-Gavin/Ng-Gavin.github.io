@@ -20,7 +20,7 @@ summary: "University of Hawaii Drone Technologies develops an autonomous drone f
 The University of Hawaii Drone Technologies(UHDT) is a Vertically Integrated Project(VIP) which is a multidisciplinary team consisting of mechanical, electrical, and computer engineers. The Student Unmanned Aerial Systems Competition(SUAS) is an annual competition hosted by the Association for Unmanned Vehicle Systems International(AUVSI). In this competition, drones are tasked with autonomously navigating a course and completing a series of tasks. The tasks include autonomously traversing a series of waypoints, identifying and locating targets, and dropping payloads cooresponding to each target. This is done as a simulated mission of package delivery to a remote location.
 
 <p align="center">
-  <img class="img-fluid" src="../img/suas/drone.png">
+  <img class="img-fluid" src="../img/suas/drone.jpg">
 </p>
 
 For this project, our team was split up into several subsystems each assigned to different ascpects of the drone system. I was the lead of the Image Proccesing subsystem. My subsystem was tasked with creating an autonomous system to identify and locate targets on the ground using the drone's camera. This was done using a combination of computer vision and machine learning.

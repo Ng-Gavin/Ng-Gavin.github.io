@@ -1,7 +1,7 @@
 ---
 layout: essay
 type: essay
-title: "Javascript, WODs the deal?"
+title: "JavaScript, WODs the deal?"
 # All dates must be YYYY-MM-DD format!
 date: 2023-08-31
 published: true
