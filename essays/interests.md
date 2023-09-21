@@ -24,4 +24,4 @@ When working with software, I primarily like programming embedded systems. I lik
 
 ## Future
 
-Building on my interests in automation, I also like artificial intelligence and machine learning. I have dabbled with using machine learning in my projects, but I would like to learn more about it. The idea that a machine or computer can perform tasks with endless variability that normally could only be performed by a human is fascinating. Being able to create programs that can adapt and learn without every possibility of being hard coded is really exciting to me.
+Building on my interests in automation, I also like artificial intelligence and machine learning. I have dabbled with using machine learning in my projects, but I would like to learn more about it. The idea that a machine or computer can perform tasks with endless variability that normally could only be performed by a human is fascinating. Being able to create programs that can adapt and learn without every possibility of being hard coded is exciting to me.
