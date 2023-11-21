@@ -8,8 +8,9 @@ labels:
   - Software Engineering
   - AI
 ---
-<img class="rounded float-start pe-4" src="../img/ai/AI-Motherboard-scaled.jpg">
-
+<p align="center">
+    <img class="img-fluid" src="../img/ai/AI-Motherboard-scaled.jpg">
+</p>
 ## Overview
 AI has become a very powerful tool in the modern world. It has been integrated into many different fields to solve problems and speed up development. Personally, AI tools such as ChatGPT, Bing Chat, and GitHub Copilot have been very useful in my workflow. Depending what I'm doing, these tools work themselves into my workflow with varying degrees of use. I try not to resort to these tools as a first destination for most problems, preferring to go the route of using forums, guides, and API documentation. My typical use case for these AI tools are to get general idea of a topic from multiple sources due to large language model AI's being trained on multiple data sources, thus having it's outputs as a somewhat cross referenced statement across multiple sources. Having used AI tools and creating AI models for projects, I can see the power of AI when properly utilized.
 
