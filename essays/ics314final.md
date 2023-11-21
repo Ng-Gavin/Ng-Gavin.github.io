@@ -2,7 +2,7 @@
 layout: essay
 type: essay
 title: "Final Project Idea"
-published: true
+published: false
 date: 2023-10-31
 labels:
   - Software Engineering
