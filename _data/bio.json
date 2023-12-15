@@ -1,0 +1,100 @@
+{
+  "basics": {
+    "name": "Gavin Ng",
+    "label": "Student",
+    "picture": "https://avatars.githubusercontent.com/u/16393929?v=4",
+    "email": "gavinng@hawaii.edu",
+    "phone": "808-351-6447",
+    "website": "http://github.com/Ng-Gavin",
+    "summary": "I am studying for a B.S. in Computer Engineering in the College of Engineering: Electrical and Computer Engineering at the University of Hawaii. I expect to graduate in Spring, 2024.",
+    "location": { "address": "", "postalCode": "96817", "city": "Honolulu", "countryCode": "USA", "region": "Hawaii" },
+    "profiles": [
+      { "network": "github", "username": "Ng-Gavin", "url": "http://github.com/Ng-Gavin" },
+      { "network": "linkedin", "username": "gavingsng", "url": "http://linkedin.com/in/gavingsng" }
+    ]
+  },
+  "interests": [
+    { "name": "Robotics" },
+    { "name": "Automation" },
+    { "name": "Machine Learning" },
+    { "name": "Embedded Systems" }
+  ],
+  "skills": [
+    {
+      "name": "Languages and Frameworks",
+      "keywords": [ "C", "C++", "Java", "Javascript", "Python", "Assembly", "Verilog", "MATLAB" ]
+    },
+    {
+      "name": "Toolsets/OS",
+      "keywords": [ "Windows", "Ubuntu", "Git/GitHub", "Eclipse", "Visual Studio Code", "VirtualBox", "Onshape", " Autodesk Inventor", "Ultimaker Cura" ]
+    },
+    {
+      "name": "Tools",
+      "keywords": [ "MIG Welding", "Soldering", "Power Tools", "Hand Tools" ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Hawaii, Honolulu, HI",
+      "area": "Computer Engineering (expected Spring, 2024)",
+      "studyType": "B.S.",
+      "startDate": "2020-09-01",
+      "endDate": "Present",
+      "courses": [
+      ]
+    }
+  ],
+  "work": [
+    {
+      "company": "Maryknoll Highschool",
+      "position": "Robotics Mentor",
+      "website": "",
+      "startDate": "2022-01-01",
+      "endDate": "Present",
+      "summary": "Mentor for the Maryknoll Highschool Robotics Team",
+      "highlights": [
+        "Teaching key technical skills like programming, wiring, and using tools.",
+        "Teaching soft skills like teamwork, communication, and problem solving."
+      ]
+    },
+    {
+      "company": "Native Hawaiian Science & Engineering Mentorship Program (NHSEMP)",
+      "position": "Mentor",
+      "website": "http://nhsemp.eng.hawaii.edu",
+      "startDate": "2022-06-06",
+      "endDate": "2022-8-22",
+      "summary": "Summer mentor at the University of Hawaii on behalf of the University of Hawaii Drone Technologies Lab. ",
+      "highlights": [
+        "Assigned lab relevant projects and teaching skills to accomplish them.",
+        "List of skills that needed to be taught: 3D modelling and printing, programming, and soldering."
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "University of Hawaii Drone Technologies",
+      "website": "https://me.hawaii.edu/design/uhdt/",
+      "position": "Image Processing Lead",
+      "startDate": "2022-01-10",
+      "endDate": "Present",
+      "summary": "Lead for the image processing subsystem",
+      "highlights": [
+        "Making algorithms to process images from the drone's camera to detect and classify objects of interest.",
+        "Organize team to accomplish tasks and meet deadlines."
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Hawaii Regional Finalists",
+      "date": "2019",
+      "awarder": "FIRST Robotics Competition",
+      "summary": "My team got 2nd place at the Hawaii Regional."
+    }
+  ],
+  "references": [
+    {
+      "name": "Available upon request"
+    }
+  ]
+}

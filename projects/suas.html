@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="title" content="Student Unmanned Aerial Systems Competition - Computer Vision | Gavin Ng | Professional Portfolio">
+    <meta name="description" content="">
+    <meta name="image" content="https://avatars.githubusercontent.com/u/16393929?v=4">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Gavin Ng | Professional Portfolio">
+    <meta property="og:url" content="https://Ng-Gavin.github.io/projects/suas.html">
+    <meta property="og:title" content="Student Unmanned Aerial Systems Competition - Computer Vision | Gavin Ng | Professional Portfolio">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/16393929?v=4">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/techfolio-theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/css/rouge/github.css">
+    <!-- Load MathJax if 'mathjax: true' is found in your _config.yml. -->
+    
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    
+
+    <title>Student Unmanned Aerial Systems Competition - Computer Vision | Gavin Ng | Professional Portfolio</title>
+  </head>
+  <body>
+  <header class="navbar navbar-expand navbar-light bg-light bg-gradient border-bottom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Gavin Ng</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <a class="nav-link" href="/#projects">Projects</a>
+        <a class="nav-link" href="/#essays">Essays</a>
+        <a class="nav-link" href="/resume.html">Resume</a>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<div class="container py-4">
+  <h1 class="display-4">Student Unmanned Aerial Systems Competition - Computer Vision</h1>
+ <p align="center">
+  <img class="img-fluid" src="../img/suas/UHDT.png" />
+</p>
+
+<p>The University of Hawaii Drone Technologies(UHDT) is a Vertically Integrated Project(VIP) which is a multidisciplinary team consisting of mechanical, electrical, and computer engineers. The Student Unmanned Aerial Systems Competition(SUAS) is an annual competition hosted by the Association for Unmanned Vehicle Systems International(AUVSI). In this competition, drones are tasked with autonomously navigating a course and completing a series of tasks. The tasks include autonomously traversing a series of waypoints, identifying and locating targets, and dropping payloads cooresponding to each target. This is done as a simulated mission of package delivery to a remote location.</p>
+
+<p align="center">
+  <img class="img-fluid" src="../img/suas/drone.jpg" />
+</p>
+
+<p>For this project, our team was split up into several subsystems each assigned to different ascpects of the drone system. I was the lead of the Image Proccesing subsystem. My subsystem was tasked with creating an autonomous system to identify and locate targets on the ground using the drone’s camera. This was done using a combination of computer vision and machine learning.</p>
+
+<p align="center">
+  <img class="img-fluid" src="../img/suas/target.png" />
+</p>
+
+<p>The payload is a water bottle with a description of the target on it’s label. These bottles must be dropped on the coorsponding target within a 15 feet radius. Targets are characterized by their shape, color of the shape, alphanumeric, and color of the alphanumeric. This is accomplished with a combination of object detection, shape recognition, color recognition, and alphanumeric recognition algorithms. The object detection and shape recognition algorithms are made using YOLOv5, a common machine vision library. Color recognition was made using the K-means clustering, a data analyzation technique. Alphanumeric recognition was made using the Tesseract OCR library. These algorithms were trained on a custom artificial dataset we made using a Python script, the script was also made to generate a label file for each image. A script then is used to take the results of the algorithms combined with drone sensor data embedded into the image to determine the location of the target as GPS coordinates. A final script uses the results of the previous script to create a waypoint file for the drone to follow to drop the payloads.</p>
+
+<p>Here is the main file that initializes all the algorithms:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">import</span> <span class="n">os</span>
+<span class="n">import</span> <span class="n">cv2</span>
+<span class="n">from</span> <span class="n">PIL</span> <span class="n">import</span> <span class="n">Image</span>
+<span class="n">import</span> <span class="n">time</span>
+<span class="n">from</span> <span class="n">ColorRec</span> <span class="n">import</span> <span class="n">color_rec_large</span> <span class="n">as</span> <span class="n">CRL</span>
+<span class="n">from</span> <span class="n">AlphanumRec</span> <span class="n">import</span> <span class="n">image2textConf</span> <span class="n">as</span> <span class="n">AR</span>
+<span class="n">from</span> <span class="n">ObjectDetection</span> <span class="n">import</span> <span class="n">ObjectDetection</span>
+<span class="n">from</span> <span class="n">ObjectDetection</span> <span class="n">import</span> <span class="n">class_to_shape</span>
+<span class="n">import</span> <span class="n">TargetClass</span>
+<span class="n">from</span> <span class="n">metadataExtractor2</span> <span class="n">import</span> <span class="n">extractMetadata</span> <span class="n">as</span> <span class="n">dataExtract</span>
+<span class="n">from</span> <span class="n">payloadDelivery</span> <span class="n">import</span> <span class="n">deliveryScript</span> <span class="n">as</span> <span class="n">deliveryScript</span>
+<span class="n">from</span> <span class="n">Geotag</span> <span class="n">import</span> <span class="n">geotag</span> <span class="n">as</span> <span class="n">geotag</span>
+<span class="n">from</span> <span class="n">Geotag</span> <span class="n">import</span> <span class="n">haversine</span> <span class="n">as</span> <span class="n">distance</span>
+<span class="n">from</span> <span class="n">Close_Enough_Test_Cases_Test</span> <span class="n">import</span> <span class="n">order_payloads</span> <span class="n">as</span> <span class="n">match</span>
+
+<span class="cp">#Payload 1 Info
+</span><span class="n">dock1</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">shape1</span> <span class="o">=</span> <span class="s">"HEXAGON"</span>
+<span class="n">shapeColor1</span> <span class="o">=</span> <span class="s">"GREEN"</span> 
+<span class="n">alphanumColor1</span> <span class="o">=</span> <span class="s">"YELLOW"</span>
+<span class="n">alphanum1</span> <span class="o">=</span> <span class="s">"7"</span>
+
+<span class="cp">#Payload 2 Info
+</span><span class="n">dock2</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">shape2</span> <span class="o">=</span> <span class="s">"RECTANGLE"</span>
+<span class="n">shapeColor2</span> <span class="o">=</span> <span class="s">"WHITE"</span> 
+<span class="n">alphanumColor2</span> <span class="o">=</span> <span class="s">"YELLOW"</span>
+<span class="n">alphanum2</span> <span class="o">=</span> <span class="s">"P"</span>
+
+<span class="cp">#Payload 3 Info
+</span><span class="n">dock3</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="n">shape3</span> <span class="o">=</span> <span class="s">"CIRCLE"</span>
+<span class="n">shapeColor3</span> <span class="o">=</span> <span class="s">"BROWN"</span> 
+<span class="n">alphanumColor3</span> <span class="o">=</span> <span class="s">"ORANGE"</span>
+<span class="n">alphanum3</span> <span class="o">=</span> <span class="s">"3"</span>
+
+<span class="cp">#Payload 4 Info
+</span><span class="n">dock4</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">shape4</span> <span class="o">=</span> <span class="s">"OCTAGON"</span>
+<span class="n">shapeColor4</span> <span class="o">=</span> <span class="s">"RED"</span> 
+<span class="n">alphanumColor4</span> <span class="o">=</span> <span class="s">"ORANGE"</span>
+<span class="n">alphanum4</span> <span class="o">=</span> <span class="s">"T"</span>
+
+<span class="cp">#Payload 5 Info
+</span><span class="n">dock5</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="n">shape5</span> <span class="o">=</span> <span class="s">"CIRCLE"</span>
+<span class="n">shapeColor5</span> <span class="o">=</span> <span class="s">"PURPLE"</span> 
+<span class="n">alphanumColor5</span> <span class="o">=</span> <span class="s">"GRAY"</span>
+<span class="n">alphanum5</span> <span class="o">=</span> <span class="s">"T"</span>
+
+<span class="n">pic_count</span> <span class="o">=</span> <span class="mi">27</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">targetList</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">payloadlist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">imagelist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">path</span> <span class="o">=</span> <span class="err">'</span><span class="n">watchdog</span><span class="err">'</span>
+<span class="n">trash</span> <span class="o">=</span> <span class="err">'</span><span class="n">old</span><span class="err">'</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="err">'</span><span class="n">image_width</span><span class="err">'</span><span class="o">:</span> <span class="mi">6000</span><span class="p">,</span>
+      <span class="err">'</span><span class="n">image_height</span><span class="err">'</span><span class="o">:</span> <span class="mi">4000</span><span class="p">,</span>
+      <span class="err">'</span><span class="n">resolution</span><span class="err">'</span><span class="o">:</span> <span class="mf">3.91e-9</span>
+      <span class="p">}</span>
+<span class="k">for</span> <span class="n">x</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pic_count</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">:</span>
+    <span class="n">imagelist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="err">'</span><span class="n">image</span><span class="p">{</span><span class="n">x</span><span class="p">}.</span><span class="n">jpg</span><span class="err">'</span><span class="p">)</span>
+<span class="n">def</span> <span class="n">watch_directory</span><span class="p">()</span><span class="o">:</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">print</span><span class="p">(</span><span class="s">"File Watcher Initiated"</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">len</span><span class="p">(</span><span class="n">targetList</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="n">and</span> <span class="p">(</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">pic_count</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="n">in</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">:</span>
+            <span class="k">if</span> <span class="n">len</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="n">and</span> <span class="p">(</span><span class="n">filename</span> <span class="n">in</span> <span class="n">imagelist</span><span class="p">)</span><span class="o">:</span>
+                <span class="k">if</span> <span class="n">filename</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">".jpg"</span><span class="p">)</span> <span class="n">or</span> <span class="n">filename</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">".jpeg"</span><span class="p">)</span> <span class="n">or</span> <span class="n">filename</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">".png"</span><span class="p">)</span><span class="o">:</span>
+                    <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="cp"># Wait until the file is fully created
+</span>                    <span class="k">while</span> <span class="n">True</span><span class="o">:</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span> <span class="n">and</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">:</span>
+                            <span class="k">break</span>
+                        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="cp"># Process the image file
+</span>                    <span class="n">ODCL</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span>
+                    <span class="cp"># Delete the image file
+</span>                    <span class="n">os</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span>
+                    <span class="n">count</span> <span class="o">+=</span><span class="mi">1</span>    
+        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="err">#</span> <span class="n">Check</span> <span class="n">directory</span> <span class="n">every</span> <span class="n">__</span> <span class="n">seconds</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">len</span><span class="p">(</span><span class="n">targetList</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="n">or</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;=</span><span class="n">pic_count</span><span class="p">)</span><span class="o">:</span>
+        <span class="n">matched_list</span> <span class="o">=</span> <span class="n">match</span><span class="p">(</span><span class="n">payloadlist</span><span class="p">,</span> <span class="n">targetList</span><span class="p">)</span>
+        <span class="n">deliveryScript</span><span class="p">(</span><span class="n">targetList</span><span class="p">,</span> <span class="n">matched_list</span><span class="p">)</span>
+
+<span class="n">def</span> <span class="n">ODCL</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="o">:</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">f</span><span class="err">'</span><span class="p">{</span><span class="n">source</span><span class="p">}</span><span class="err">'</span><span class="p">)</span>
+
+    <span class="cp">#Object Detection and Shape Recogntion Function Call
+</span>    <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span> <span class="o">=</span> <span class="n">dataExtract</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">[</span><span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">]</span>
+    <span class="n">results</span><span class="p">,</span> <span class="n">bboxes</span> <span class="o">=</span> <span class="n">ObjectDetection</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">bbox</span> <span class="n">in</span> <span class="n">bboxes</span><span class="o">:</span>
+        <span class="cp">#Get Bounding Box and Shape Classification of Found Target
+</span>        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">conf</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="n">bbox</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">x1</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">y1</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">x2</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+        <span class="n">target_area</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span><span class="o">+</span><span class="n">x2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y1</span><span class="o">+</span><span class="n">y2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">target_area</span> <span class="o">&gt;</span> <span class="mi">82000</span><span class="o">:</span>
+            <span class="cp">#Geotag Target
+</span>            <span class="n">xMid</span><span class="p">,</span><span class="n">yMid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span><span class="o">+</span><span class="n">x2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">y1</span><span class="o">+</span><span class="n">y2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span> <span class="o">=</span> <span class="n">geotag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">xMid</span><span class="p">,</span> <span class="n">yMid</span><span class="p">)</span>
+            <span class="n">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Lat:{latitude}, Long:{longitude}"</span><span class="p">)</span>
+
+            <span class="cp">#Check if duplicate Target
+</span>            <span class="k">if</span> <span class="n">not</span> <span class="n">targetList</span> <span class="n">or</span> <span class="n">all</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">target</span><span class="p">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">target</span><span class="p">.</span><span class="n">longitude</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">target</span> <span class="n">in</span> <span class="n">targetList</span><span class="p">)</span><span class="o">:</span>
+                <span class="cp">#Crop Target from Image
+</span>                <span class="n">cropped</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">crop</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">))</span>
+                <span class="cp">#cropped.show()
+</span>
+                <span class="n">shape</span> <span class="o">=</span> <span class="n">class_to_shape</span><span class="p">(</span><span class="n">type</span><span class="p">)</span>
+                <span class="n">print</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+
+                <span class="cp">#ColorRecLarge Function Call
+</span>                <span class="n">alphanum_string</span><span class="p">,</span> <span class="n">shape_string</span><span class="p">,</span> <span class="n">filtered1</span><span class="p">,</span> <span class="n">filtered2</span> <span class="o">=</span> <span class="n">CRL</span><span class="p">(</span><span class="n">cropped</span><span class="p">)</span>
+                    
+                <span class="n">print</span><span class="p">(</span><span class="n">shape_string</span><span class="p">)</span>
+                <span class="n">print</span><span class="p">(</span><span class="n">alphanum_string</span><span class="p">)</span>
+            
+                <span class="cp">#Alphanumeric Recognition Function Call
+</span>                <span class="n">alphanum</span> <span class="o">=</span> <span class="s">""</span>
+                <span class="n">alphanum1</span><span class="p">,</span> <span class="n">alphanum_conf1</span> <span class="o">=</span> <span class="n">AR</span><span class="p">(</span><span class="n">filtered1</span><span class="p">)</span>
+                <span class="n">alphanum2</span><span class="p">,</span> <span class="n">alphanum_conf2</span> <span class="o">=</span> <span class="n">AR</span><span class="p">(</span><span class="n">filtered2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">alphanum_conf1</span> <span class="o">&gt;</span> <span class="n">alphanum_conf2</span><span class="o">:</span>
+                    <span class="n">alphanum</span> <span class="o">=</span> <span class="n">alphanum1</span>
+                <span class="nl">else:</span>
+                    <span class="n">alphanum</span> <span class="o">=</span> <span class="n">alphanum2</span>
+                <span class="n">print</span><span class="p">(</span><span class="n">alphanum</span><span class="p">)</span>
+
+                <span class="n">NewTarget</span> <span class="o">=</span> <span class="n">TargetClass</span><span class="p">.</span><span class="n">Target</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">shape_string</span><span class="p">,</span> <span class="n">alphanum_string</span><span class="p">,</span> <span class="n">alphanum</span><span class="p">)</span>
+                <span class="n">targetList</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">NewTarget</span><span class="p">)</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">f</span><span class="s">"Runtime:"</span><span class="p">,</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+
+<span class="n">payload1</span> <span class="o">=</span> <span class="n">TargetClass</span><span class="p">.</span><span class="n">Payload</span><span class="p">(</span><span class="n">dock1</span><span class="p">,</span> <span class="n">shape1</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">shapeColor1</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanumColor1</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanum1</span><span class="p">.</span><span class="n">upper</span><span class="p">());</span> <span class="n">payloadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">payload1</span><span class="p">);</span> <span class="n">print</span><span class="p">(</span><span class="s">"Payload 1 Added"</span><span class="p">)</span>
+<span class="n">payload2</span> <span class="o">=</span> <span class="n">TargetClass</span><span class="p">.</span><span class="n">Payload</span><span class="p">(</span><span class="n">dock2</span><span class="p">,</span> <span class="n">shape2</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">shapeColor2</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanumColor2</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanum2</span><span class="p">.</span><span class="n">upper</span><span class="p">());</span> <span class="n">payloadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">payload2</span><span class="p">);</span> <span class="n">print</span><span class="p">(</span><span class="s">"Payload 2 Added"</span><span class="p">)</span>
+<span class="n">payload3</span> <span class="o">=</span> <span class="n">TargetClass</span><span class="p">.</span><span class="n">Payload</span><span class="p">(</span><span class="n">dock3</span><span class="p">,</span> <span class="n">shape3</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">shapeColor3</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanumColor3</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanum3</span><span class="p">.</span><span class="n">upper</span><span class="p">());</span> <span class="n">payloadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">payload3</span><span class="p">);</span> <span class="n">print</span><span class="p">(</span><span class="s">"Payload 3 Added"</span><span class="p">)</span>
+<span class="n">payload4</span> <span class="o">=</span> <span class="n">TargetClass</span><span class="p">.</span><span class="n">Payload</span><span class="p">(</span><span class="n">dock4</span><span class="p">,</span> <span class="n">shape4</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">shapeColor4</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanumColor4</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanum4</span><span class="p">.</span><span class="n">upper</span><span class="p">());</span> <span class="n">payloadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">payload4</span><span class="p">);</span> <span class="n">print</span><span class="p">(</span><span class="s">"Payload 4 Added"</span><span class="p">)</span>
+<span class="n">payload5</span> <span class="o">=</span> <span class="n">TargetClass</span><span class="p">.</span><span class="n">Payload</span><span class="p">(</span><span class="n">dock5</span><span class="p">,</span> <span class="n">shape5</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">shapeColor5</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanumColor5</span><span class="p">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">alphanum5</span><span class="p">.</span><span class="n">upper</span><span class="p">());</span> <span class="n">payloadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">payload5</span><span class="p">);</span> <span class="n">print</span><span class="p">(</span><span class="s">"Payload 5 Added"</span><span class="p">)</span>
+
+<span class="n">watch_directory</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The full code can be found here: <a href="https://github.com/Ng-Gavin/Ng-Gavin.github.io">UHDT-ODCL</a></p>
+
+</div>
+
+<footer class="navbar navbar-expand navbar-light bg-light bg-gradient border-top">
+  <div class="container-fluid">
+    <div class="ms-auto">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <small><a class="nav-link" href="https://techfolios.github.io">Made with Techfolios</a></small>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
